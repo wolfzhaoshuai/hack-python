@@ -1,2 +1,3 @@
 # hack-python
 some tools writed in python
+当我们使用一台内网机时，有些渗透测试工具没有安装，这时该怎么办呢？一般的Unix/Linux主机上都默认安装了python，此时便可以用python来编写一些小工具脚本去做相应的测试操作。当然若安装了一些python库更好，比如scapy，没有的话也可以用socket模块去操作raw_socket来完成scapy的工作；没有beautifulsoup的话，那就直接用python的正则表达式吧，等等很多工具的功能模块都可以用原生的python来写。终于可以对外分享自己写的马马虎虎的小脚本了，陆续更新中。。。
