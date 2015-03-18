@@ -73,7 +73,15 @@ def create_tcp_header(source_ip,dest_ip,dst_port):
                        tcp_window_size,tcp_check,tcp_urg_ptr)
 
 
-    #pseudo header fields ???
+    '''
+    pseudo header.Because the checksum option in tcp can not be closed,
+    and calculating the checksum need a pseudo header.The header includes
+    32bits-long source ip_addr,32bits-long dest_addr,6bits-long protocol number,
+    the length of TCP package,and zero to make the total length of pseduo header
+    is multiple of 16bits.When the other side receives the packet,the system will
+    extract source_ip,dest_addr and protocol number from ip header to construct
+    the pseudo header for tcp,then calculate the checksum to verify the data.
+    '''
     source_addr=socket.inet_aton(source_ip)
     dest_addr=socket.inet_aton(dest_ip)
     placeholder=0
