@@ -20,6 +20,7 @@ def usage():
     print "-p PORT, --port=PORT    the listen port"
     print "-l LISTEN, --listen=LISTEN    turn on/off listen mode"
     print "-c COMMAND, --command=COMMAND    turn on/off command mode"
+    sys.exit()
 
 def client_sender(buffer):
     client=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
