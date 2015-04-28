@@ -15,10 +15,8 @@ import time
 
 email_count=1
 
-def send_email():
+def send_email(from_addr,to_addr,user,passwd):
     global email_count
-    to_addr="956478752@qq.com"
-    from_addr="15165268607@163.com"
     subject_header="Subject: Sending PDF Attachment"
     attachment='/home/wolf/python_books/cdn_list.pdf'
     body='This message sends a PDF attachment'
@@ -48,8 +46,6 @@ def send_email():
     msg.add_header('Content-Disposition','attachment',filename=attachment)
     m.attach(msg)
 
-    user="15165268607@163.com"
-    passwd="!junshuai1"
     s=smtplib.SMTP('smtp.163.com')
     print 'successfully connect to 163 smtp mail server'
     #s.set_debuglevel(1)
@@ -67,15 +63,16 @@ def send_email():
     email_count+=1
     s.quit()
 
-def send_cycle(thread_num):
+def send_cycle(from_addr,to_addr,user,passwd):
     while True:
-        send_email()
+        send_email(from_addr,to_addr,user,passwd)
 
-def send_threads(thread_num):
+def send_threads(thread_num,from_addr,to_addr,user,passwd):
     start=time.time()
     thread_list=[]
     for i in range(thread_num):
-        t=threading.Thread(target=send_cycle,args=(i,))
+        t=threading.Thread(target=send_cycle,\
+                           args=(from_addr,to_addr,user,passwd))
         thread_list.append(t)
 
     for i in range(thread_num):
@@ -91,15 +88,28 @@ def main():
     p=optparse.OptionParser(description='send mass emails to one user',\
                             version='1.0',prog='massemail',\
                             usage='python massemail.py -n thread_number')
+    p.add_option('--to_addr','-t',dest='to_addr',type='str',\
+                 help='set the destination email address')
+    p.add_option('--from_addr','-f',dest='from_addr',type='str',\
+                 help='set the source email address')
+    p.add_option('--user','-u',dest='user',type='str',\
+                 help='set the username')
+    p.add_option('--passwd','-p',dest='passwd',type='str',\
+                 help='set the passwd')
     p.add_option('--thread_number','-n',dest='thread_number',\
                  type='int',action='store',\
                  help="set the number of threads")
     opts,args=p.parse_args()
+    to_addr=opts.to_addr
+    from_addr=opts.from_addr
+    user=opts.user
+    passwd=opts.passwd
     thread_number=opts.thread_number
-    if thread_number==None:
+    if to_addr==None or from_addr==None or user==None or passwd==None\
+       or thread_number==None:
         p.print_help()
     else:
-        send_threads(thread_number)
+        send_threads(thread_number,from_addr,to_addr,user,passwd)
         
 if __name__=="__main__":
     main()
