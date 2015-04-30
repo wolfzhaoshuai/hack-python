@@ -8,7 +8,6 @@ import Queue
 def scan(srcip,dstip,q):
     while True:
         port=q.get()
-        print "processing port %d" % port
         scanner(srcip,dstip,port)
         q.task_done()
 
@@ -16,7 +15,7 @@ def scan(srcip,dstip,q):
 def main():
 
     p=optparse.OptionParser(description='use syn packet to scan selected ports',\
-                            usage='''./syncan_with_rawsocket.py -s srcip -d
+                            usage='''./syncan.py -s srcip -d
                             dstip -sp startport -ep end_port -t thread_number''',\
                             version='1.0.1')
     p.add_option('--source_ip','-s',dest='source_ip',type='string',\
