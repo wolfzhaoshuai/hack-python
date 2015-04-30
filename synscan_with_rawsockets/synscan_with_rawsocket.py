@@ -7,6 +7,7 @@
 
 import socket
 import struct
+import optparse
 
 
 def check_sum(msg):
@@ -104,7 +105,7 @@ def scanner(source_ip,dest_ip,dst_port):
     try:
         s=socket.socket(socket.AF_INET,socket.SOCK_RAW,socket.IPPROTO_TCP)   
     except:
-        print "Could not create thr raw socket"
+        print "Could not create the raw socket,possiblely have no authority"
         exit(1)
     #tell the kernel not to construct IP header,since ourself constructed it
     s.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)
@@ -112,11 +113,11 @@ def scanner(source_ip,dest_ip,dst_port):
     ip_header=create_ip_header(source_ip,dest_ip)
     tcp_header=create_tcp_header(source_ip,dest_ip,dst_port)
     packet=ip_header+tcp_header
-    s.sendto(packet,(dest_ip,0))
-    data=s.recv(1024)
+    s.sendto(packet,(dest_ip,dst_port))
+    data=s.recv(64)
 
     #transform netdata to hexadecimal format to know it's details
-    data_len=len(data)
+    '''data_len=len(data)
     print "received %d bytes data" % data_len
     byte_count=data_len/8+1
     for i in xrange(byte_count):
@@ -125,19 +126,15 @@ def scanner(source_ip,dest_ip,dst_port):
                 break
             print str(hex(ord(data[i*8+j])))+' '*4,
         print
-    print "tcp flag is %d " % ord(data[33])#tcp flag'''
-    
-    if len(data)==44:
+    print "tcp flag is %d " % ord(data[33])#tcp flags'''
+
+    flags=ord(data[33])
+    if flags==18 and len(data)==44:
         print "Port %d is open" % dst_port
+    else:
+        print "Port %d is closed|filtered" % dst_port
 
 
-source_ip="172.16.24.12"
-dest_ip="172.16.24.4"
-start_port=8007
-end_port=8010
-for port in range(start_port,end_port):
-    scanner(source_ip,dest_ip,port)
-    
 
 
 
