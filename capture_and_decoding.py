@@ -17,14 +17,16 @@ from ctypes import *
 
 
 class INADDR(Structure):
+    #point out the c_type's bits will help you avoid the error
+    #"buffer size too small" in amd64
     _fields_=[
-        ("s_addr",c_uint32)]
+        ("s_addr",c_uint,32)]
 
 class ICMP(Structure):
     _fields_=[
-        ("icmp_type",c_ubyte),
-        ("icmp_code",c_ubyte),
-        ("icmp_cksum",c_ushort)]
+        ("icmp_type",c_ubyte,8),
+        ("icmp_code",c_ubyte,8),
+        ("icmp_cksum",c_ushort,16)]
     def __new__(self,socket_buffer=None):
         return self.from_buffer_copy(socket_buffer)
     def __init__(self,socket_buffer=None):
@@ -35,15 +37,15 @@ class IP(Structure):
     _fields_=[
         ("ip_ihl",c_ubyte,4),
         ("ip_version",c_ubyte,4),
-        ("ip_tos",c_ubyte),
-        ("ip_len",c_ushort),
-        ("ip_id",c_ushort),
-        ("ip_off",c_ushort),
-        ("ip_ttl",c_ubyte),
-        ("ip_p",c_ubyte),
-        ("ip_sum",c_ushort),
-        ("ip_src",c_ulong),
-        ("ip_dst",c_ulong)]
+        ("ip_tos",c_ubyte,8),
+        ("ip_len",c_ushort,16),
+        ("ip_id",c_ushort,16),
+        ("ip_off",c_ushort,16),
+        ("ip_ttl",c_ubyte,8),
+        ("ip_p",c_ubyte,8),
+        ("ip_sum",c_ushort,16),
+        ("ip_src",c_ulong,32),
+        ("ip_dst",c_ulong,32)]
 
     def __new__(self,socket_buffer=None):
         return self.from_buffer_copy(socket_buffer)
