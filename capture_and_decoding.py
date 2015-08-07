@@ -75,14 +75,14 @@ def main():
     sniffer=socket.socket(socket.AF_INET,socket.SOCK_RAW,socket_protocol)
     #set this option to let packet start from IP_header
     sniffer.setsockopt(socket.IPPROTO_IP,socket.IP_HDRINCL,1)
-    sniffer.bind((host,0))
+    #sniffer.bind((host,0))
     #if windows,then use ioctl to turn on the NIC in promiscious mode
     if os.name=="nt":
         sniffer.ioctl(socket.SIO_RCVAL,socket.RCVAL_ON)
 
     try:
         while True:
-            packet=sniffer.recvfrom(1024)[0]
+            packet=sniffer.recvfrom(256)[0]
             #uncomment to know the details in hexadecimal
             '''p_len=len(packet)
             if p_len>30:
@@ -105,7 +105,7 @@ def main():
                       (icmp_header.icmp_type,icmp_header.icmp_code)
             print "\n"
     except:
-        print "Error occured"
+        print sys.exc_info()
 
         
     if os.name=="nt":
