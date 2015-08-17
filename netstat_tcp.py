@@ -46,8 +46,10 @@ def get_out_put(line):
 	recvq=get_queue(queues[0])
 	sendq=get_queue(queues[1])
 	pid=info_list[7]
-	out_str='tcp'+'  '+pid+'  '+recvq+'  '+sendq+'  '+src_ip+':'+src_port+' '*10+dst_ip+':'+dst_port+' '*10+state
-	print out_str
+	#out_str='tcp'+'  '+pid+'  '+recvq+'  '+sendq+'  '+src_ip+':'+src_port+' '*10+dst_ip+':'+dst_port+' '*10+state
+	#print out_str
+	print "tcp  ",
+	print "%-6s%-8s%-8s%-24s%-24s%s" % (pid,recvq,sendq,src_ip+":"+src_port,dst_ip+":"+dst_port,state)
 
 def summarise(continous_flag,interval):
 	while 1:
